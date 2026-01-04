@@ -1,0 +1,296 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* InsightPay Design System
+   Premium survey rewards platform with trust-inspiring indigo and emerald accents
+*/
+
+@layer base {
+  :root {
+    /* Core Brand Colors */
+    --background: 210 20% 98%;
+    --foreground: 224 71% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 10%;
+
+    /* Primary - Deep Indigo */
+    --primary: 234 89% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 234 89% 65%;
+
+    /* Secondary - Soft Gray */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 71% 15%;
+
+    /* Muted */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Accent - Emerald (money/success) */
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 160 84% 45%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 234 89% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom Colors */
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(234 89% 55%) 0%, hsl(260 85% 60%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(172 66% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(234 89% 55%) 0%, hsl(260 85% 60%) 50%, hsl(160 84% 45%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(220 14% 96%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(224 71% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(224 71% 10% / 0.1), 0 2px 4px -2px hsl(224 71% 10% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(224 71% 10% / 0.1), 0 4px 6px -4px hsl(224 71% 10% / 0.1);
+    --shadow-glow: 0 0 40px hsl(234 89% 55% / 0.15);
+    --shadow-accent-glow: 0 0 40px hsl(160 84% 39% / 0.2);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 224 71% 10%;
+    --sidebar-primary: 234 89% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 224 71% 15%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 234 89% 55%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 71% 6%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 71% 6%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 234 89% 65%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 234 89% 70%;
+
+    --secondary: 224 71% 12%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 224 71% 12%;
+    --muted-foreground: 220 9% 60%;
+
+    --accent: 160 84% 45%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 160 84% 50%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 224 71% 15%;
+    --input: 224 71% 15%;
+    --ring: 234 89% 65%;
+
+    --success: 160 84% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 0%;
+    --info: 199 89% 55%;
+    --info-foreground: 0 0% 100%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(234 89% 65%) 0%, hsl(260 85% 70%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(160 84% 45%) 0%, hsl(172 66% 55%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(234 89% 50%) 0%, hsl(260 85% 55%) 50%, hsl(160 84% 40%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(224 71% 4%) 0%, hsl(224 71% 6%) 100%);
+
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(234 89% 65% / 0.2);
+    --shadow-accent-glow: 0 0 40px hsl(160 84% 45% / 0.25);
+
+    --sidebar-background: 224 71% 6%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 234 89% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 224 71% 12%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 224 71% 15%;
+    --sidebar-ring: 234 89% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Custom Thin Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* Gradient text */
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-hero {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Button glow effects */
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-accent {
+    box-shadow: var(--shadow-accent-glow);
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Modern input styling */
+  .input-modern {
+    @apply bg-secondary/50 border-border/50 focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all duration-200;
+  }
+
+  /* Status badges */
+  .status-paid {
+    @apply bg-success/10 text-success border-success/20;
+  }
+
+  .status-pending {
+    @apply bg-warning/10 text-warning border-warning/20;
+  }
+
+  .status-processing {
+    @apply bg-info/10 text-info border-info/20;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-in {
+    animation: animateIn 0.5s ease-out forwards;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out forwards;
+  }
+
+  @keyframes animateIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    opacity: 0;
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+}
