@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { routeForStatus } from '@/utils/statusRedirect.ts';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,22 +26,28 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await login(formData.email, formData.password);
+      const user = await login(formData.email, formData.password);
+      console.log(user);
+
+      // Redirect based on user status
+      navigate(routeForStatus(user.status));
+
       toast({
         title: "Welcome back!",
         description: "You've been successfully logged in.",
       });
-      navigate('/surveys');
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: error?.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
   };
+
+
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);

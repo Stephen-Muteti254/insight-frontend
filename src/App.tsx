@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { ProtectedRoute, ApplicationGuard } from "@/components/guards";
+import { ProtectedRoute, ApplicationGuard, AdminGuard } from "@/components/guards";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -27,6 +27,9 @@ import Dashboard from "./pages/Dashboard";
 import Surveys from "./pages/Surveys";
 import Wallet from "./pages/Wallet";
 import Settings from "./pages/Settings";
+
+// Admin Pages
+import { AdminDashboard, Applications, Withdrawals, SurveyManagement } from "./pages/admin";
 
 import NotFound from "./pages/NotFound";
 
@@ -61,6 +64,12 @@ const App = () => (
               <Route path="/surveys" element={<ApplicationGuard><Surveys /></ApplicationGuard>} />
               <Route path="/wallet" element={<ApplicationGuard><Wallet /></ApplicationGuard>} />
               <Route path="/settings" element={<ApplicationGuard><Settings /></ApplicationGuard>} />
+
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
+              <Route path="/admin/applications" element={<AdminGuard><Applications /></AdminGuard>} />
+              <Route path="/admin/withdrawals" element={<AdminGuard><Withdrawals /></AdminGuard>} />
+              <Route path="/admin/surveys" element={<AdminGuard><SurveyManagement /></AdminGuard>} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>

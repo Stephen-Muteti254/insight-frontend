@@ -25,7 +25,7 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!acceptedTerms) {
       toast({
         title: "Terms required",
@@ -48,21 +48,16 @@ export default function Register() {
 
     try {
       await register(formData.email, formData.password, formData.name);
-      toast({
-        title: "Account created!",
-        description: "Please verify your email to continue.",
-      });
+      // success toast already inside register, or optionally here
       navigate('/verify-email');
     } catch (error) {
-      toast({
-        title: "Registration failed",
-        description: "Could not create account. Please try again.",
-        variant: "destructive",
-      });
+      // Do NOT show another toast here — it's already handled in register
+      console.error("[HANDLE SUBMIT] Registration error:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const handleGoogleSignUp = async () => {
     if (!acceptedTerms) {

@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { routeForStatus } from '@/utils/statusRedirect.ts';
 
-interface ApplicationGuardProps {
+interface AdminGuardProps {
   children: ReactNode;
 }
 
-export function ApplicationGuard({ children }: ApplicationGuardProps) {
-  const { user, isLoading } = useAuth();
+export function AdminGuard({ children }: AdminGuardProps) {
+  const { user, isLoading, isAuthenticated } = useAuth();
+
+  console.log(user);
 
   if (isLoading) {
     return (
@@ -18,10 +19,14 @@ export function ApplicationGuard({ children }: ApplicationGuardProps) {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
-  if (user.status !== "application_approved") {
-    return <Navigate to={routeForStatus(user.status)} replace />;
+  // Check if user has admin role
+  // In production, this should be validated server-side
+  if (!user?.isAdmin) {
+    return <Navigate to="/surveys" replace />;
   }
 
   return <>{children}</>;

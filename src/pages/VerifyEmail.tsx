@@ -7,10 +7,11 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { Mail, Loader2, RefreshCw } from 'lucide-react';
+import { routeForStatus } from '@/utils/statusRedirect';
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
-  const { user, verifyEmail } = useAuth();
+  const { user, verifyEmail, resendVerification } = useAuth();
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -28,26 +29,15 @@ export default function VerifyEmail() {
     setIsLoading(true);
 
     try {
-      const success = await verifyEmail(code);
-      if (success) {
+      const updatedUser = await verifyEmail(code);
+
+      if (updatedUser) {
+        navigate(routeForStatus(updatedUser.status));
         toast({
-          title: "Email verified!",
+          title: "Email verified",
           description: "Your email has been successfully verified.",
         });
-        navigate('/application');
-      } else {
-        toast({
-          title: "Invalid code",
-          description: "The verification code is incorrect. Please try again.",
-          variant: "destructive",
-        });
       }
-    } catch (error) {
-      toast({
-        title: "Verification failed",
-        description: "Could not verify your email. Please try again.",
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
@@ -55,14 +45,14 @@ export default function VerifyEmail() {
 
   const handleResend = async () => {
     setIsResending(true);
-    // Simulate resending
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast({
-      title: "Code sent!",
-      description: "A new verification code has been sent to your email.",
-    });
-    setIsResending(false);
+
+    try {
+      await resendVerification();
+    } finally {
+      setIsResending(false);
+    }
   };
+
 
   return (
     <AuthLayout 

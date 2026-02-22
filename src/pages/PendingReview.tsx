@@ -83,20 +83,9 @@ export default function PendingReview() {
 
           {/* Notification Info */}
           <div className="flex items-center justify-center gap-3 p-4 rounded-lg bg-secondary/50">
-            <Mail className="h-5 w-5 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
               We'll email you at <span className="font-medium">{user?.email}</span> when your application is reviewed.
             </p>
-          </div>
-
-          {/* Demo Button */}
-          <div className="pt-4 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-3">
-              Demo Mode: Click below to simulate approval
-            </p>
-            <Button variant="hero" onClick={handleDemoApproval}>
-              Simulate Approval
-            </Button>
           </div>
         </CardContent>
       </Card>

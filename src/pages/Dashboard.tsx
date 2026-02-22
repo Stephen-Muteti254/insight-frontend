@@ -22,7 +22,6 @@ export default function Dashboard() {
         {/* Welcome */}
         <div>
           <h1 className="text-2xl font-bold">Welcome back, {user?.name?.split(' ')[0]}!</h1>
-          <p className="text-muted-foreground">Here's your earnings overview</p>
         </div>
 
         {/* Stats Cards */}
