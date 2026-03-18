@@ -100,7 +100,7 @@ export default function Register() {
       <Card variant="glass">
         <CardContent className="p-6 space-y-6">
           {/* Google Sign Up */}
-          <Button
+          {/*<Button
             variant="outline"
             className="w-full"
             onClick={handleGoogleSignUp}
@@ -134,7 +134,7 @@ export default function Register() {
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-card px-2 text-muted-foreground">Or continue with email</span>
             </div>
-          </div>
+          </div>*/}
 
           {/* Email Form */}
           <form onSubmit={handleSubmit} className="space-y-4">

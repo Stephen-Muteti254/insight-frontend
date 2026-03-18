@@ -28,3 +28,11 @@ export const startSurvey = async (surveyId: string) => {
   const res = await api.post(`/surveys/${surveyId}/start`);
   return res.data.data;
 };
+
+export const fetchSurveyAttachment = async (url: string) => {
+  const res = await api.get(url, {
+    responseType: "blob",
+  });
+
+  return res.data;
+};

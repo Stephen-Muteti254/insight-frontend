@@ -81,7 +81,7 @@ export default function Login() {
       <Card variant="glass">
         <CardContent className="p-6 space-y-6">
           {/* Google Sign In */}
-          <Button
+          {/*<Button
             variant="outline"
             className="w-full"
             onClick={handleGoogleLogin}
@@ -106,16 +106,16 @@ export default function Login() {
               />
             </svg>
             Continue with Google
-          </Button>
+          </Button>*/}
 
-          <div className="relative">
+          {/*<div className="relative">
             <div className="absolute inset-0 flex items-center">
               <Separator className="w-full" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-card px-2 text-muted-foreground">Or continue with email</span>
             </div>
-          </div>
+          </div>*/}
 
           {/* Email Form */}
           <form onSubmit={handleSubmit} className="space-y-4">

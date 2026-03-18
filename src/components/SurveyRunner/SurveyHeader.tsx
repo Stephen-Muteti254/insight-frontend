@@ -31,7 +31,7 @@ export function SurveyHeader({
           variant="outline" 
           className="flex items-center gap-2 px-4 py-2 text-lg bg-accent/10 border-accent text-accent self-start sm:self-auto"
         >
-          <DollarSign className="h-5 w-5" />
+          {/*<DollarSign className="h-5 w-5" />*/}
           Earn ${reward.toFixed(2)}
         </Badge>
       </div>
@@ -62,13 +62,13 @@ export function SurveyHeader({
       </div>
 
       {/* Warning Banner */}
-      <Alert variant="destructive" className="bg-destructive/5 border-destructive/20">
+      {/*<Alert variant="destructive" className="bg-destructive/5 border-destructive/20">
         <AlertTriangle className="h-4 w-4" />
         <AlertDescription className="text-sm">
           <strong>Important:</strong> You must complete this survey in one session. 
           Leaving or refreshing this page may forfeit your reward.
         </AlertDescription>
-      </Alert>
+      </Alert>*/}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { FileText, Image, File, Download, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SurveyAttachment } from '@/types/survey';
+import { fetchSurveyAttachment } from '@/lib/survey.api';
 
 interface SurveyAttachmentsProps {
   attachments: SurveyAttachment[];
@@ -28,9 +29,24 @@ export function SurveyAttachments({ attachments }: SurveyAttachmentsProps) {
     return null;
   }
 
-  const handleOpenAttachment = (attachment: SurveyAttachment) => {
-    // Open in new tab for viewing
-    window.open(attachment.url, '_blank', 'noopener,noreferrer');
+  const handleOpenAttachment = async (attachment: SurveyAttachment) => {
+    try {
+      const blob = await fetchSurveyAttachment(attachment.url);
+
+      const fileUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.target = "_blank";
+      link.download = attachment.name;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+    } catch (error) {
+      console.error("Attachment open failed", error);
+    }
   };
 
   return (

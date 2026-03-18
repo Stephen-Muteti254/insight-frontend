@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { Clock, Play, CheckCircle, AlertCircle } from 'lucide-react';
 import { getAvailableSurveys, startSurvey as startSurveyApi } from '@/lib/survey.api';
+import { useNavigate } from "react-router-dom";
 
 
 function SurveySkeleton() {
@@ -38,6 +39,7 @@ export default function Surveys() {
   const [activeSurvey, setActiveSurvey] = useState<any | null>(null);
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAvailableSurveys()
@@ -135,7 +137,7 @@ export default function Surveys() {
               <Card
                 key={survey.id}
                 variant="interactive"
-                onClick={() => startSurvey(survey)}
+                onClick={() => navigate(`/surveys/${survey.id}/start`)}
                 className="cursor-pointer hover:border-primary/30"
               >
                 <CardContent className="p-6">
@@ -161,19 +163,7 @@ export default function Surveys() {
                         <p className="text-2xl font-bold text-accent">
                           ${survey.reward.toFixed(2)}
                         </p>
-                        {/*<p className="text-xs text-muted-foreground">reward</p>*/}
                       </div>
-                      {/*<Button
-                        variant="hero"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          startSurvey(survey);
-                        }}
-                        disabled={activeSurvey !== null}
-                      >
-                        <Play className="h-4 w-4 mr-1" />
-                        Start
-                      </Button>*/}
                     </div>
                   </div>
                 </CardContent>

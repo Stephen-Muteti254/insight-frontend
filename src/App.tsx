@@ -27,6 +27,7 @@ import Dashboard from "./pages/Dashboard";
 import Surveys from "./pages/Surveys";
 import Wallet from "./pages/Wallet";
 import Settings from "./pages/Settings";
+import SurveyStart from "./pages/SurveyStart"
 
 // Admin Pages
 import { AdminDashboard, Applications, Withdrawals, SurveyManagement } from "./pages/admin";
@@ -62,6 +63,7 @@ const App = () => (
               {/* Protected Dashboard Routes */}
               <Route path="/dashboard" element={<ApplicationGuard><Dashboard /></ApplicationGuard>} />
               <Route path="/surveys" element={<ApplicationGuard><Surveys /></ApplicationGuard>} />
+              <Route path="/surveys/:surveyId/start" element={<SurveyStart />} />
               <Route path="/wallet" element={<ApplicationGuard><Wallet /></ApplicationGuard>} />
               <Route path="/settings" element={<ApplicationGuard><Settings /></ApplicationGuard>} />
 

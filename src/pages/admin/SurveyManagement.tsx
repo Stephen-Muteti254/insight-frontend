@@ -281,29 +281,53 @@ export default function SurveyManagement() {
     if (!selectedSurvey) return;
 
     setIsProcessing(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setSurveys((prev) =>
-      prev.map((s) =>
-        s.id === selectedSurvey.id
-          ? {
-              ...s,
-              ...formData,
-              expiresAt: new Date(formData.expiresAt || s.expiresAt),
-            }
-          : s
-      )
-    );
+    try {
+      const payload = {
+        ...formData,
+        durationMinutes: Number(formData.durationMinutes),
+        reward: Number(formData.reward),
+        totalSlots: Number(formData.totalSlots),
+        expiresAt: formData.expiresAt || null,
+      };
 
-    toast({
-      title: 'Survey Updated',
-      description: `"${formData.title}" has been updated successfully.`,
-    });
+      const updatedSurvey = await updateSurveyAdmin(
+        selectedSurvey.id,
+        payload
+      );
 
-    setIsProcessing(false);
-    setEditDialogOpen(false);
-    setSelectedSurvey(null);
-    setFormData(initialFormState);
+      setSurveys((prev) =>
+        prev.map((s) =>
+          s.id === selectedSurvey.id
+            ? {
+                ...updatedSurvey,
+                createdAt: new Date(updatedSurvey.createdAt),
+                expiresAt: updatedSurvey.expiresAt
+                  ? new Date(updatedSurvey.expiresAt)
+                  : null,
+              }
+            : s
+        )
+      );
+
+      toast({
+        title: "Survey Updated",
+        description: `"${updatedSurvey.title}" has been updated successfully.`,
+      });
+
+      setEditDialogOpen(false);
+      setSelectedSurvey(null);
+      setFormData(initialFormState);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to update survey.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleDelete = async () => {
