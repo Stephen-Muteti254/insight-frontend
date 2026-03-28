@@ -31,18 +31,17 @@ export function SurveyCompletion({
   const timeUntilEnabled = Math.max(0, minPercentRequired - percentElapsed);
 
   return (
-    <Card className="border-2 border-dashed border-primary/30 bg-primary/5">
+    <Card className="bg-transparent border-0 shaddow-0">
       <CardContent className="py-6">
         <div className="text-center space-y-4">
-          <CheckCircle2 className="h-10 w-10 text-primary mx-auto" />
-          <div>
+          {/*<div>
             <h3 className="font-semibold text-lg text-foreground">
               Finished the Survey?
             </h3>
             <p className="text-muted-foreground text-sm mt-1">
               Click below once you've completed all survey questions.
             </p>
-          </div>
+          </div>*/}
           
           <AlertDialog>
             <AlertDialogTrigger asChild>

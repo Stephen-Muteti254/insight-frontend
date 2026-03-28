@@ -58,9 +58,9 @@ export function PublicLayout({ children }: PublicLayoutProps) {
                 <Button variant="ghost" asChild>
                   <Link to="/login">Sign In</Link>
                 </Button>
-                <Button variant="hero" asChild>
+                {/*<Button variant="hero" asChild>
                   <Link to="/register">Get Started</Link>
-                </Button>
+                </Button>*/}
               </div>
 
               {/* Mobile Menu Button */}
@@ -99,9 +99,9 @@ export function PublicLayout({ children }: PublicLayoutProps) {
                 <Button variant="ghost" asChild className="justify-start">
                   <Link to="/login">Sign In</Link>
                 </Button>
-                <Button variant="hero" asChild>
+                {/*<Button variant="hero" asChild>
                   <Link to="/register">Get Started</Link>
-                </Button>
+                </Button>*/}
               </div>
             </div>
           </div>

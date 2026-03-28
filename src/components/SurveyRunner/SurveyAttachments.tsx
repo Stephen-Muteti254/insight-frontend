@@ -53,7 +53,7 @@ export function SurveyAttachments({ attachments }: SurveyAttachmentsProps) {
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
-          <FileText className="h-5 w-5 text-primary" />
+          {/*<FileText className="h-5 w-5 text-primary" />*/}
           Survey Materials
         </CardTitle>
       </CardHeader>
@@ -88,7 +88,7 @@ export function SurveyAttachments({ attachments }: SurveyAttachmentsProps) {
           ))}
         </div>
         <p className="text-xs text-muted-foreground mt-3">
-          Review these materials before starting the survey (optional).
+          Review these materials before starting the survey
         </p>
       </CardContent>
     </Card>

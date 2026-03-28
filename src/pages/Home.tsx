@@ -41,17 +41,17 @@ const steps = [
   {
     number: '01',
     title: 'Create Your Account',
-    description: 'Sign up in seconds with your email or Google account.',
+    description: 'Sign up in seconds with your email',
   },
   {
     number: '02',
     title: 'Complete Application',
-    description: 'Answer a few quick questions to verify your profile.',
+    description: 'Answer a few questions',
   },
   {
     number: '03',
     title: 'Start Earning',
-    description: 'Browse available surveys and earn money for your insights.',
+    description: 'Browse surveys and earn for your insights.',
   },
 ];
 
@@ -68,28 +68,23 @@ export default function Home() {
 
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium animate-fade-up">
-              <TrendingUp className="h-4 w-4" />
-              Join 50,000+ users earning with InsightPay
-            </div>
 
             {/* Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight animate-fade-up" style={{ animationDelay: '0.1s' }}>
-              Share Your Insights,{' '}
-              <span className="text-gradient-hero">Earn Money</span>
+              Earn From Your Insights
+              {/*<span className="text-gradient-hero">Earn Money</span>*/}
             </h1>
 
             {/* Subheadline */}
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: '0.2s' }}>
-              Complete surveys on topics you care about and get paid instantly. Know exactly what you'll earn before you start.
+              Complete surveys and get paid instantly
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.3s' }}>
               <Button variant="hero" size="xl" asChild>
                 <Link to="/register">
-                  Start Earning Today
+                  Get Started Today
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Link>
               </Button>
@@ -99,7 +94,7 @@ export default function Home() {
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex items-center justify-center gap-8 pt-8 animate-fade-up" style={{ animationDelay: '0.4s' }}>
+            {/*<div className="flex items-center justify-center gap-8 pt-8 animate-fade-up" style={{ animationDelay: '0.4s' }}>
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="flex items-center justify-center gap-1">
@@ -109,7 +104,7 @@ export default function Home() {
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                 </div>
               ))}
-            </div>
+            </div>*/}
           </div>
         </div>
       </section>
@@ -119,9 +114,9 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Choose InsightPay?</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            {/*<p className="text-muted-foreground max-w-2xl mx-auto">
               We believe your time and opinions are valuable. That's why we offer transparent, fair compensation for every survey.
-            </p>
+            </p>*/}
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -146,7 +141,7 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">How It Works</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Getting started is quick and easy. Begin earning in just a few simple steps.
+              Getting started is quick and easy
             </p>
           </div>
 
@@ -179,11 +174,11 @@ export default function Home() {
           <div className="max-w-2xl mx-auto space-y-6">
             <h2 className="text-3xl font-bold">Ready to Start Earning?</h2>
             <p className="text-primary-foreground/80">
-              Join thousands of users who are already earning money by sharing their valuable insights.
+              Join thousands of users who are earning money by sharing their insights.
             </p>
             <Button variant="secondary" size="xl" asChild className="bg-background text-foreground hover:bg-background/90">
               <Link to="/register">
-                Create Free Account
+                Create Account
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Link>
             </Button>

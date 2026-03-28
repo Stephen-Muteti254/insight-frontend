@@ -9,22 +9,29 @@ import { toast } from '@/hooks/use-toast';
 import { Clock, Play, CheckCircle, AlertCircle } from 'lucide-react';
 import { getAvailableSurveys, startSurvey as startSurveyApi } from '@/lib/survey.api';
 import { useNavigate } from "react-router-dom";
-
+import { Skeleton } from '@/components/ui/skeleton';
 
 function SurveySkeleton() {
   return (
-    <Card className="animate-pulse">
+    <Card>
       <CardContent className="p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          
+          {/* Left */}
           <div className="space-y-3 flex-1">
-            <div className="h-5 w-2/3 bg-muted rounded" />
-            <div className="h-4 w-24 bg-muted rounded" />
+            <Skeleton className="h-5 w-2/3" />
+            <Skeleton className="h-4 w-24" />
+
             <div className="flex gap-4">
-              <div className="h-4 w-20 bg-muted rounded" />
-              <div className="h-4 w-24 bg-muted rounded" />
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-24" />
             </div>
           </div>
-          <div className="h-10 w-24 bg-muted rounded" />
+
+          {/* Right */}
+          <div className="text-right space-y-2">
+            <Skeleton className="h-6 w-16 ml-auto" />
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -95,22 +102,6 @@ export default function Surveys() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* Active Survey Modal */}
-        {activeSurvey && (
-          <Card className="border-primary">
-            <CardContent className="p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Survey in Progress</h3>
-                <Badge variant="processing">Active</Badge>
-              </div>
-              <Progress value={progress} className="h-3" />
-              <p className="text-sm text-muted-foreground text-center">
-                {progress < 100 ? 'Completing survey...' : 'Survey complete!'}
-              </p>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -119,13 +110,11 @@ export default function Surveys() {
         </div>
 
         {/* Surveys Grid */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading ? (
-            <>
-              <SurveySkeleton />
-              <SurveySkeleton />
-              <SurveySkeleton />
-            </>
+            Array.from({ length: 6 }).map((_, i) => (
+              <SurveySkeleton key={i} />
+            ))
           ) : surveys.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center text-muted-foreground">

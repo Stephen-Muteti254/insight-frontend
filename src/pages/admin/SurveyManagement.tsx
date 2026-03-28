@@ -75,6 +75,7 @@ interface Survey {
   externalUrl: string;
   isActive: boolean;
   attachments: SurveyAttachment[];
+  questions: any[];
   createdAt: Date;
   expiresAt: Date;
 }
@@ -151,10 +152,16 @@ const initialFormState = {
   durationMinutes: 10,
   reward: 1.00,
   totalSlots: 100,
-  externalUrl: '',
   expiresAt: '',
   isActive: true,
 };
+
+interface SurveyQuestion {
+  id: string
+  question: string
+  type: "text" | "multiple_choice" | "single_choice"
+  options?: string[]
+}
 
 export default function SurveyManagement() {
   const { toast } = useToast();
@@ -170,6 +177,7 @@ export default function SurveyManagement() {
   const [formData, setFormData] = useState(initialFormState);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [questions, setQuestions] = useState<SurveyQuestion[]>([])
 
 
   useEffect(() => {
@@ -218,7 +226,7 @@ export default function SurveyManagement() {
   };
 
   const handleCreate = async () => {
-    if (!formData.title || !formData.topic || !formData.externalUrl) {
+    if (!formData.title || !formData.topic) {
       toast({
         title: 'Validation Error',
         description: 'Please fill in all required fields',
@@ -237,6 +245,8 @@ export default function SurveyManagement() {
           fd.append(k, String(v));
         }
       });
+
+      fd.append("questions", JSON.stringify(questions))
 
       attachments.forEach((file) => {
         fd.append('attachments', file);
@@ -289,6 +299,7 @@ export default function SurveyManagement() {
         reward: Number(formData.reward),
         totalSlots: Number(formData.totalSlots),
         expiresAt: formData.expiresAt || null,
+        questions
       };
 
       const updatedSurvey = await updateSurveyAdmin(
@@ -334,23 +345,39 @@ export default function SurveyManagement() {
     if (!selectedSurvey) return;
 
     setIsProcessing(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setSurveys((prev) => prev.filter((s) => s.id !== selectedSurvey.id));
+    try {
+      await deleteSurveyAdmin(selectedSurvey.id);
 
-    toast({
-      title: 'Survey Deleted',
-      description: `"${selectedSurvey.title}" has been deleted.`,
-      variant: 'destructive',
-    });
+      setSurveys((prev) =>
+        prev.filter((s) => s.id !== selectedSurvey.id)
+      );
 
-    setIsProcessing(false);
-    setDeleteDialogOpen(false);
-    setSelectedSurvey(null);
+      toast({
+        title: "Survey Deleted",
+        description: `"${selectedSurvey.title}" has been deleted.`,
+        variant: "destructive",
+      });
+
+    } catch (err) {
+      console.error(err);
+
+      toast({
+        title: "Error",
+        description: "Failed to delete survey.",
+        variant: "destructive",
+      });
+
+    } finally {
+      setIsProcessing(false);
+      setDeleteDialogOpen(false);
+      setSelectedSurvey(null);
+    }
   };
 
   const openEditDialog = (survey: Survey) => {
     setSelectedSurvey(survey);
+
     setFormData({
       title: survey.title,
       topic: survey.topic,
@@ -358,10 +385,26 @@ export default function SurveyManagement() {
       durationMinutes: survey.durationMinutes,
       reward: survey.reward,
       totalSlots: survey.totalSlots,
-      externalUrl: survey.externalUrl,
-      expiresAt: format(survey.expiresAt, 'yyyy-MM-dd'),
+      expiresAt: survey.expiresAt
+        ? format(survey.expiresAt, "yyyy-MM-dd")
+        : "",
       isActive: survey.isActive,
     });
+
+    const formattedQuestions = survey.questions.map((q: any) => ({
+      id: q.id,
+      question: q.text,
+      type:
+        q.type === "short_text" || q.type === "long_text"
+          ? "text"
+          : q.type === "multiple_choice"
+          ? "single_choice"
+          : "multiple_choice",
+      options: q.options?.map((o: any) => o.label) || [],
+    }));
+
+    setQuestions(formattedQuestions);
+
     setEditDialogOpen(true);
   };
 
@@ -624,7 +667,102 @@ export default function SurveyManagement() {
               />
             </div>
 
-            <div className="space-y-2">
+            {/* Survey Questions */}
+            <div className="space-y-4 flex flex-col">
+              <Label>Survey Questions</Label>
+
+              {questions.map((q, index) => (
+                <div key={q.id} className="border rounded-lg p-4 space-y-3">
+
+                  <Input
+                    placeholder="Enter question"
+                    value={q.question}
+                    onChange={(e) => {
+                      const copy = [...questions]
+                      copy[index].question = e.target.value
+                      setQuestions(copy)
+                    }}
+                  />
+
+                  <Select
+                    value={q.type}
+                    onValueChange={(value) => {
+                      const copy = [...questions]
+                      copy[index].type = value as any
+                      setQuestions(copy)
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Question Type"/>
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="text">Text</SelectItem>
+                      <SelectItem value="single_choice">Single Choice</SelectItem>
+                      <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  {(q.type === "single_choice" || q.type === "multiple_choice") && (
+                    <div className="space-y-2">
+                      {(q.options || []).map((opt, i) => (
+                        <Input
+                          key={i}
+                          value={opt}
+                          placeholder="Option"
+                          onChange={(e) => {
+                            const copy = [...questions]
+                            copy[index].options![i] = e.target.value
+                            setQuestions(copy)
+                          }}
+                        />
+                      ))}
+
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          const copy = [...questions]
+                          copy[index].options = [...(copy[index].options || []), ""]
+                          setQuestions(copy)
+                        }}
+                      >
+                        Add Option
+                      </Button>
+                    </div>
+                  )}
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setQuestions(prev => prev.filter((_,i)=>i!==index))
+                    }}
+                  >
+                    Remove Question
+                  </Button>
+
+                </div>
+              ))}
+
+              <Button
+                onClick={() =>
+                  setQuestions(prev => [
+                    ...prev,
+                    {
+                      id: crypto.randomUUID(),
+                      question: "",
+                      type: "text",
+                      options: []
+                    }
+                  ])
+                }
+              >
+                Add Question
+              </Button>
+            </div>
+
+            {/*<div className="space-y-2">
               <Label htmlFor="externalUrl">Survey URL *</Label>
               <Input
                 id="externalUrl"
@@ -632,7 +770,7 @@ export default function SurveyManagement() {
                 value={formData.externalUrl}
                 onChange={(e) => setFormData({ ...formData, externalUrl: e.target.value })}
               />
-            </div>
+            </div>*/}
 
             {/* Survey Parameters */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -806,13 +944,58 @@ export default function SurveyManagement() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-url">Survey URL</Label>
-              <Input
-                id="edit-url"
-                value={formData.externalUrl}
-                onChange={(e) => setFormData({ ...formData, externalUrl: e.target.value })}
-              />
+            {/* Survey Questions */}
+            <div className="space-y-4">
+              <Label>Survey Questions</Label>
+
+              {questions.map((q, index) => (
+                <div key={q.id} className="border rounded-lg p-4 space-y-3">
+
+                  <Input
+                    value={q.question}
+                    onChange={(e) => {
+                      const copy = [...questions]
+                      copy[index].question = e.target.value
+                      setQuestions(copy)
+                    }}
+                  />
+
+                  <Select
+                    value={q.type}
+                    onValueChange={(value) => {
+                      const copy = [...questions]
+                      copy[index].type = value as any
+                      setQuestions(copy)
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue/>
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="text">Text</SelectItem>
+                      <SelectItem value="single_choice">Single Choice</SelectItem>
+                      <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  {(q.type === "single_choice" || q.type === "multiple_choice") && (
+                    <div className="space-y-2">
+                      {(q.options || []).map((opt, i) => (
+                        <Input
+                          key={i}
+                          value={opt}
+                          onChange={(e) => {
+                            const copy = [...questions]
+                            copy[index].options![i] = e.target.value
+                            setQuestions(copy)
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -24,7 +24,7 @@ export function Footer() {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-8" />
             <p className="text-sm text-muted-foreground max-w-sm">
-              Share your insights, earn rewards. Join thousands of users who get paid for their valuable opinions.
+              Earn from your insights. Join thousands of users who get paid for their opinions.
             </p>
           </div>
 

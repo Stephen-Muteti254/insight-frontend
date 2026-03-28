@@ -16,12 +16,6 @@ const contactInfo = [
     subtext: 'We aim to respond within 24 hours',
   },
   {
-    icon: MessageSquare,
-    title: 'Help Center',
-    description: 'Browse our FAQ',
-    subtext: 'Find answers to common questions',
-  },
-  {
     icon: Clock,
     title: 'Business Hours',
     description: 'Mon - Fri, 9am - 6pm EST',

@@ -50,9 +50,6 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex h-16 items-center px-6 border-b border-border">
           <Link to="/admin" className="flex items-center gap-2">
             <Logo className="h-8 w-auto" />
-            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded">
-              Admin
-            </span>
           </Link>
         </div>
 
@@ -80,7 +77,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </nav>
 
         {/* Admin User Section */}
-        <div className="p-4 border-t border-border">
+        {/*<div className="p-4 border-t border-border">
           <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/5 border border-primary/20">
             <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
               <Shield className="h-4 w-4 text-primary" />
@@ -92,14 +89,6 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </div>
           <div className="flex gap-2 mt-2">
             <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => navigate('/surveys')}
-            >
-              User View
-            </Button>
-            <Button
               variant="ghost"
               size="sm"
               className="text-muted-foreground hover:text-destructive"
@@ -108,7 +97,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
-        </div>
+        </div>*/}
       </aside>
 
       {/* Mobile Header */}

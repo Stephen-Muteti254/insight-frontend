@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   ClipboardList,
   Wallet,
-  Settings,
+  User,
   LogOut,
   Menu,
   X,
@@ -24,7 +24,7 @@ const navItems = [
   { href: '/surveys', label: 'Surveys', icon: ClipboardList },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/wallet', label: 'Wallet', icon: Wallet },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/me', label: 'About You', icon: User },
 ];
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -80,19 +80,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{user?.name}</p>
-              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-            </div>
+            <Button
+              variant="ghost"
+              className="w-full p-0 justify-start text-muted-foreground hover:text-destructive"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            className="w-full mt-2 justify-start text-muted-foreground hover:text-destructive"
-            onClick={handleLogout}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
-          </Button>
+          
         </div>
       </aside>
 
@@ -161,7 +158,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <h1 className="text-lg font-semibold">
               {navItems.find(item => item.href === location.pathname)?.label || 'Dashboard'}
             </h1>
-            <div className="flex items-center gap-4">
+            {/*<div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm font-medium text-accent">
                   ${((user?.balance || 0) + (user?.pendingBalance || 0)).toFixed(2)}
@@ -169,7 +166,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <p className="text-xs text-muted-foreground">Total Earnings</p>
               </div>
               <ThemeToggle />
-            </div>
+            </div>*/}
           </header>
 
           {/* Page Content */}

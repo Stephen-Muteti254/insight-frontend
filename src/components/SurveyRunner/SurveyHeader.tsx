@@ -27,13 +27,13 @@ export function SurveyHeader({
       {/* Title and Reward Row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{title}</h1>
-        <Badge 
+        {/*<Badge 
           variant="outline" 
           className="flex items-center gap-2 px-4 py-2 text-lg bg-accent/10 border-accent text-accent self-start sm:self-auto"
         >
-          {/*<DollarSign className="h-5 w-5" />*/}
+          <DollarSign className="h-5 w-5" />
           Earn ${reward.toFixed(2)}
-        </Badge>
+        </Badge>*/}
       </div>
 
       {/* Timer Display */}

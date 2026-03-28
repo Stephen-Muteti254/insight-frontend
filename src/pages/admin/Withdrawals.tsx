@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/components/layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Search, CheckCircle, XCircle, Clock, DollarSign, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
+import { getWithdrawals, updateWithdrawal } from "@/lib/admin.api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Withdrawal {
   id: string;
@@ -43,61 +45,16 @@ interface Withdrawal {
   processedAt?: Date;
 }
 
-// Mock data for demonstration
-const mockWithdrawals: Withdrawal[] = [
-  {
-    id: 'w1',
-    userId: 'u1',
-    userName: 'John Smith',
-    userEmail: 'john@example.com',
-    paypalEmail: 'john.paypal@example.com',
-    amount: 25.00,
-    status: 'pending',
-    requestedAt: new Date('2024-01-22'),
-  },
-  {
-    id: 'w2',
-    userId: 'u2',
-    userName: 'Sarah Johnson',
-    userEmail: 'sarah@example.com',
-    paypalEmail: 'sarah@paypal.com',
-    amount: 50.00,
-    status: 'pending',
-    requestedAt: new Date('2024-01-21'),
-  },
-  {
-    id: 'w3',
-    userId: 'u3',
-    userName: 'Mike Davis',
-    userEmail: 'mike@example.com',
-    paypalEmail: 'mike.d@paypal.com',
-    amount: 100.00,
-    status: 'paid',
-    requestedAt: new Date('2024-01-18'),
-    processedAt: new Date('2024-01-19'),
-  },
-  {
-    id: 'w4',
-    userId: 'u4',
-    userName: 'Emily Brown',
-    userEmail: 'emily@example.com',
-    paypalEmail: 'emily.b@paypal.com',
-    amount: 15.00,
-    status: 'rejected',
-    requestedAt: new Date('2024-01-17'),
-    processedAt: new Date('2024-01-18'),
-  },
-];
-
 export default function Withdrawals() {
   const { toast } = useToast();
-  const [withdrawals, setWithdrawals] = useState<Withdrawal[]>(mockWithdrawals);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedWithdrawal, setSelectedWithdrawal] = useState<Withdrawal | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<'approve' | 'reject' | 'markPaid' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const filteredWithdrawals = withdrawals.filter((w) => {
     const matchesSearch =
@@ -108,12 +65,38 @@ export default function Withdrawals() {
     return matchesSearch && matchesStatus;
   });
 
+  useEffect(() => {
+    const fetchWithdrawals = async () => {
+      try {
+        const data = await getWithdrawals();
+
+        const formatted = data.map((w: any) => ({
+          ...w,
+          requestedAt: new Date(w.requestedAt),
+        }));
+
+        setWithdrawals(formatted);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWithdrawals();
+  }, []);
+
   const handleAction = async () => {
     if (!selectedWithdrawal || !confirmAction) return;
 
     setIsProcessing(true);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await updateWithdrawal(
+      selectedWithdrawal.id,
+      confirmAction === "markPaid"
+        ? "paid"
+        : confirmAction
+    );
 
     let newStatus: Withdrawal['status'];
     let toastMessage: string;
@@ -209,7 +192,7 @@ export default function Withdrawals() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/*<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="border-orange-500/20 bg-orange-500/5">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -243,7 +226,7 @@ export default function Withdrawals() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </div>*/}
 
         {/* Filters */}
         <Card>
@@ -292,14 +275,49 @@ export default function Withdrawals() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredWithdrawals.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                      No withdrawal requests found
+
+              {loading ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-28" />
+                        <Skeleton className="h-3 w-40" />
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <Skeleton className="h-4 w-40" />
+                    </TableCell>
+
+                    <TableCell>
+                      <Skeleton className="h-4 w-16" />
+                    </TableCell>
+
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+
+                    <TableCell>
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                    </TableCell>
+
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                      </div>
                     </TableCell>
                   </TableRow>
-                ) : (
-                  filteredWithdrawals.map((withdrawal) => (
+                ))
+              ) : filteredWithdrawals.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                    No withdrawal requests found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredWithdrawals.map((withdrawal) => (
                     <TableRow key={withdrawal.id}>
                       <TableCell>
                         <div>

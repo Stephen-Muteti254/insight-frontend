@@ -65,7 +65,7 @@ const App = () => (
               <Route path="/surveys" element={<ApplicationGuard><Surveys /></ApplicationGuard>} />
               <Route path="/surveys/:surveyId/start" element={<SurveyStart />} />
               <Route path="/wallet" element={<ApplicationGuard><Wallet /></ApplicationGuard>} />
-              <Route path="/settings" element={<ApplicationGuard><Settings /></ApplicationGuard>} />
+              <Route path="/me" element={<ApplicationGuard><Settings /></ApplicationGuard>} />
 
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminGuard><AdminDashboard /></AdminGuard>} />

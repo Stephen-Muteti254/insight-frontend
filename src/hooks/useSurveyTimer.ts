@@ -24,9 +24,24 @@ export function useSurveyTimer({ expiresAt, onExpire }: UseSurveyTimerProps): Us
   }, [onExpire]);
 
   useEffect(() => {
-    if (!expiresAt) return;
+    if (!expiresAt) {
+      setIsExpired(false)
+      setTimeRemaining(0)
+      return
+    }
 
-    const expiryTime = new Date(expiresAt).getTime();
+    const expiryTime = new Date(expiresAt).getTime()
+
+    if (isNaN(expiryTime)) {
+      console.error("Invalid expiresAt:", expiresAt)
+      setIsExpired(false)
+      setTimeRemaining(0)
+      return
+    }
+
+    // RESET when new survey starts
+    initialDuration.current = 0
+
     const now = Date.now();
     const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
     
@@ -37,7 +52,7 @@ export function useSurveyTimer({ expiresAt, onExpire }: UseSurveyTimerProps): Us
     
     setTimeRemaining(remaining);
 
-    if (remaining <= 0) {
+    if (remaining <= 0 && expiresAt) {
       setIsExpired(true);
       onExpireRef.current();
       return;

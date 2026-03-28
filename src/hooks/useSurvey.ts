@@ -18,6 +18,7 @@ export function useSurvey() {
       setState("loading");
       const res = await api.get(`/surveys/${surveyId}`);
       setSurvey(res.data.data);
+      console.log(survey)
       setState("ready");
     } catch (err: any) {
       setError({
@@ -32,6 +33,7 @@ export function useSurvey() {
     try {
       setState("loading");
       const res = await api.post(`/surveys/${surveyId}/start`);
+      console.log(res);
       setExpiresAt(res.data.data?.expiresAt || res.data.attempt.expiresAt);
       setState("in_progress");
       return true;
@@ -45,26 +47,36 @@ export function useSurvey() {
     }
   }, []);
 
-  const completeSurvey = useCallback(async (surveyId: string) => {
-    try {
-      setState("completing");
-      const res = await api.post(`/surveys/${surveyId}/complete`);
-      setRewardCredited(res.data.data.rewardCredited);
-      setState("completed");
-      return true;
-    } catch (err: any) {
-      if (err.status === 400 && err.message.includes("expired")) {
-        setState("expired");
-      } else {
-        setError({
-          code: "COMPLETE_ERROR",
-          message: err.message,
+  const completeSurvey = useCallback(
+    async (surveyId: string, answers: Record<string, any>) => {
+      try {
+        setState("completing");
+
+        const res = await api.post(`/surveys/${surveyId}/complete`, {
+          answers,
         });
-        setState("error");
+
+        setRewardCredited(res.data.data.rewardCredited);
+        setState("completed");
+
+        return true;
+      } catch (err: any) {
+
+        if (err.status === 400 && err.message?.includes("expired")) {
+          setState("expired");
+        } else {
+          setError({
+            code: "COMPLETE_ERROR",
+            message: err.message || "Failed to complete survey",
+          });
+          setState("error");
+        }
+
+        return false;
       }
-      return false;
-    }
-  }, []);
+    },
+    []
+  );
 
   return {
     survey,

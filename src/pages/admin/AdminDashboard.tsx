@@ -1,6 +1,9 @@
 import { AdminLayout } from '@/components/layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, CreditCard, FileText, TrendingUp, Clock, CheckCircle } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { getDashboardStats } from "@/lib/admin.api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Mock stats for demonstration
 const stats = {
@@ -13,12 +16,85 @@ const stats = {
 };
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await getDashboardStats();
+        setStats(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="space-y-8">
+
+          <div>
+            <Skeleton className="h-8 w-56" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Card key={i}>
+                <CardHeader className="pb-2">
+                  <Skeleton className="h-4 w-40" />
+                </CardHeader>
+
+                <CardContent>
+                  <Skeleton className="h-10 w-20 mb-2" />
+                  <Skeleton className="h-3 w-32" />
+                </CardContent>
+              </Card>
+            ))}
+
+          </div>
+
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-5 w-40" />
+            </CardHeader>
+
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-4 rounded-lg border"
+                  >
+                    <Skeleton className="h-10 w-10 rounded-full" />
+
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-40" />
+                      <Skeleton className="h-3 w-28" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+        </div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout>
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold">Admin Overview</h1>
+          <h1 className="text-2xl font-bold">Overview</h1>
         </div>
 
         {/* Stats Grid */}

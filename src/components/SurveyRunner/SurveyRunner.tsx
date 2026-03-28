@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,14 +7,16 @@ import { useSurvey } from '@/hooks/useSurvey';
 import { useSurveyTimer } from '@/hooks/useSurveyTimer';
 import { SurveyHeader } from './SurveyHeader';
 import { SurveyAttachments } from './SurveyAttachments';
-import { SurveyIframe } from './SurveyIframe';
+// import { SurveyIframe } from './SurveyIframe';
 import { SurveyCompletion } from './SurveyCompletion';
 import { SurveyExpiredModal, SurveyErrorCard } from './SurveyExpired';
 import { SurveySuccess } from './SurveySuccess';
+import { SurveyQuestions } from './SurveyQuestions'
 
 export function SurveyRunner() {
   const { surveyId } = useParams<{ surveyId: string }>();
   const navigate = useNavigate();
+  const [answers, setAnswers] = useState<Record<string, any>>({})
   
   const {
     survey,
@@ -26,6 +28,13 @@ export function SurveyRunner() {
     startSurvey,
     completeSurvey,
   } = useSurvey();
+
+  const handleAnswerChange = (questionId: string, value: any) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: value
+    }))
+  }
 
   const handleExpire = useCallback(() => {
     // Timer expired - state will be handled by the modal
@@ -58,9 +67,13 @@ export function SurveyRunner() {
   // Handle complete survey
   const handleCompleteSurvey = async () => {
     if (surveyId) {
-      await completeSurvey(surveyId);
+      await completeSurvey(surveyId, answers);
     }
   };
+  
+
+  const allAnswered =
+  survey?.questions?.every(q => answers[q.id] !== undefined) ?? true;
 
   // Loading state
   if (state === 'loading' && !survey) {
@@ -166,7 +179,7 @@ export function SurveyRunner() {
     return (
       <div className="container max-w-5xl py-6 space-y-6">
         {/* Expired modal */}
-        <SurveyExpiredModal isOpen={isExpired} />
+        <SurveyExpiredModal isOpen={isExpired && state === "in_progress"} />
 
         {/* Header with timer */}
         <SurveyHeader
@@ -193,11 +206,21 @@ export function SurveyRunner() {
         <SurveyAttachments attachments={survey.attachments} />
 
         {/* Survey iframe */}
-        <SurveyIframe externalUrl={survey.externalUrl} title={survey.title} />
+        {/*<SurveyIframe externalUrl={survey.externalUrl} title={survey.title} />*/}
+
+        {/* Survey Questions */}
+        {survey.questions && survey.questions.length > 0 && (
+          <SurveyQuestions
+            questions={survey.questions}
+            answers={answers}
+            onChange={handleAnswerChange}
+          />
+        )}
 
         {/* Completion section */}
         <SurveyCompletion
-          isCompleting={state === 'completing'}
+          disabled={!allAnswered}
+          isCompleting={state === "completing"}
           percentElapsed={percentElapsed}
           onComplete={handleCompleteSurvey}
         />
